@@ -142,6 +142,43 @@ tcp_server/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_server.dir/build.make CMakeFiles/tcp_server.dir/build
 .PHONY : tcp_server/fast
 
+#=============================================================================
+# Target rules for targets named http_server
+
+# Build rule for target.
+http_server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 http_server
+.PHONY : http_server
+
+# fast build rule for target.
+http_server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/http_server.dir/build.make CMakeFiles/http_server.dir/build
+.PHONY : http_server/fast
+
+src/http_server.o: src/http_server.cpp.o
+.PHONY : src/http_server.o
+
+# target to build an object file
+src/http_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/http_server.dir/build.make CMakeFiles/http_server.dir/src/http_server.cpp.o
+.PHONY : src/http_server.cpp.o
+
+src/http_server.i: src/http_server.cpp.i
+.PHONY : src/http_server.i
+
+# target to preprocess a source file
+src/http_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/http_server.dir/build.make CMakeFiles/http_server.dir/src/http_server.cpp.i
+.PHONY : src/http_server.cpp.i
+
+src/http_server.s: src/http_server.cpp.s
+.PHONY : src/http_server.s
+
+# target to generate assembly for a file
+src/http_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/http_server.dir/build.make CMakeFiles/http_server.dir/src/http_server.cpp.s
+.PHONY : src/http_server.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -198,8 +235,12 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... http_server"
 	@echo "... server"
 	@echo "... tcp_server"
+	@echo "... src/http_server.o"
+	@echo "... src/http_server.i"
+	@echo "... src/http_server.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

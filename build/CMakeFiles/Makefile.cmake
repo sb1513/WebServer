@@ -41,4 +41,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/server.dir/DependInfo.cmake"
   "CMakeFiles/tcp_server.dir/DependInfo.cmake"
+  "CMakeFiles/http_server.dir/DependInfo.cmake"
   )
