@@ -155,6 +155,70 @@ http_server/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/http_server.dir/build.make CMakeFiles/http_server.dir/build
 .PHONY : http_server/fast
 
+#=============================================================================
+# Target rules for targets named epoll_server
+
+# Build rule for target.
+epoll_server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 epoll_server
+.PHONY : epoll_server
+
+# fast build rule for target.
+epoll_server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/build
+.PHONY : epoll_server/fast
+
+src/epoll_server.o: src/epoll_server.cpp.o
+.PHONY : src/epoll_server.o
+
+# target to build an object file
+src/epoll_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/src/epoll_server.cpp.o
+.PHONY : src/epoll_server.cpp.o
+
+src/epoll_server.i: src/epoll_server.cpp.i
+.PHONY : src/epoll_server.i
+
+# target to preprocess a source file
+src/epoll_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/src/epoll_server.cpp.i
+.PHONY : src/epoll_server.cpp.i
+
+src/epoll_server.s: src/epoll_server.cpp.s
+.PHONY : src/epoll_server.s
+
+# target to generate assembly for a file
+src/epoll_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/src/epoll_server.cpp.s
+.PHONY : src/epoll_server.cpp.s
+
+src/http/http_request.o: src/http/http_request.cpp.o
+.PHONY : src/http/http_request.o
+
+# target to build an object file
+src/http/http_request.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/http_server.dir/build.make CMakeFiles/http_server.dir/src/http/http_request.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/src/http/http_request.cpp.o
+.PHONY : src/http/http_request.cpp.o
+
+src/http/http_request.i: src/http/http_request.cpp.i
+.PHONY : src/http/http_request.i
+
+# target to preprocess a source file
+src/http/http_request.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/http_server.dir/build.make CMakeFiles/http_server.dir/src/http/http_request.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/src/http/http_request.cpp.i
+.PHONY : src/http/http_request.cpp.i
+
+src/http/http_request.s: src/http/http_request.cpp.s
+.PHONY : src/http/http_request.s
+
+# target to generate assembly for a file
+src/http/http_request.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/http_server.dir/build.make CMakeFiles/http_server.dir/src/http/http_request.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/src/http/http_request.cpp.s
+.PHONY : src/http/http_request.cpp.s
+
 src/http_server.o: src/http_server.cpp.o
 .PHONY : src/http_server.o
 
@@ -235,9 +299,16 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... epoll_server"
 	@echo "... http_server"
 	@echo "... server"
 	@echo "... tcp_server"
+	@echo "... src/epoll_server.o"
+	@echo "... src/epoll_server.i"
+	@echo "... src/epoll_server.s"
+	@echo "... src/http/http_request.o"
+	@echo "... src/http/http_request.i"
+	@echo "... src/http/http_request.s"
 	@echo "... src/http_server.o"
 	@echo "... src/http_server.i"
 	@echo "... src/http_server.s"

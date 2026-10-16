@@ -1,3 +1,4 @@
+#include "http/http_request.h"
 
 #include <iostream>
 #include <string>
@@ -11,7 +12,6 @@
 #include <arpa/inet.h>
 
 const int PORT = 8080;
-const size_t MAX_REQUEST_SIZE = 16384;
 
 bool sendAll(int fd, const std::string& data) {
     size_t sent = 0;
@@ -28,6 +28,7 @@ bool sendAll(int fd, const std::string& data) {
             if (errno == EINTR) {
                 continue;
             }
+
             return false;
         }
 
@@ -60,10 +61,10 @@ std::string makeResponse(
 }
 
 void handleClient(int client_fd) {
-    std::string request;
+    HttpRequestParser parser;
     char buffer[4096];
 
-    while (request.find("\r\n\r\n") == std::string::npos) {
+    while (true) {
         ssize_t n = recv(client_fd, buffer, sizeof(buffer), 0);
 
         if (n == 0) {
@@ -80,116 +81,128 @@ void handleClient(int client_fd) {
             return;
         }
 
-        request.append(buffer, static_cast<size_t>(n));
+        ParseResult result = parser.append(
+            buffer,
+            static_cast<size_t>(n)
+        );
 
-        if (request.size() > MAX_REQUEST_SIZE) {
-            std::string body = "<h1>431 Request Header Fields Too Large</h1>";
+        if (result == ParseResult::INCOMPLETE) {
+            continue;
+        }
+
+        if (result != ParseResult::COMPLETE) {
+            int status = 400;
+            std::string reason = "Bad Request";
+
+            if (result == ParseResult::PAYLOAD_TOO_LARGE) {
+                status = 413;
+                reason = "Content Too Large";
+            } else if (result == ParseResult::UNSUPPORTED) {
+                status = 501;
+                reason = "Not Implemented";
+            }
+
+            std::string body = "<h1>" + reason + "</h1>";
+
             sendAll(client_fd, makeResponse(
-                431, "Request Header Fields Too Large",
-                "text/html; charset=utf-8", body
+                status,
+                reason,
+                "text/html; charset=utf-8",
+                body
             ));
+
             return;
         }
-    }
 
-    size_t line_end = request.find("\r\n");
+        const HttpRequest& request = parser.request();
 
-    if (line_end == std::string::npos) {
-        std::string body = "<h1>400 Bad Request</h1>";
+        const std::string& method = request.method;
+        const std::string& path = request.path;
+
+        std::cout << method << " " << path
+                  << " " << request.version << std::endl;
+
+        if (method != "GET" && method != "POST") {
+            std::string body = "<h1>405 Method Not Allowed</h1>";
+
+            std::string response = makeResponse(
+                405,
+                "Method Not Allowed",
+                "text/html; charset=utf-8",
+                body
+            );
+
+            response.insert(
+                response.find("\r\n") + 2,
+                "Allow: GET, POST\r\n"
+            );
+
+            sendAll(client_fd, response);
+            return;
+        }
+
+        std::string route = path;
+        size_t query_pos = route.find('?');
+
+        if (query_pos != std::string::npos) {
+            route = route.substr(0, query_pos);
+        }
+
+        if (method == "POST" && route == "/echo") {
+            sendAll(client_fd, makeResponse(
+                200,
+                "OK",
+                "text/plain; charset=utf-8",
+                request.body
+            ));
+
+            return;
+        }
+
+        if (method == "GET" && route == "/") {
+            std::string body =
+                "<!DOCTYPE html><html lang=\"en\"><head>"
+                "<meta charset=\"UTF-8\"><title>MyWebServer</title>"
+                "</head><body><h1>Hello, WebServer!</h1>"
+                "<p>HTTP parser state machine is working.</p>"
+                "<a href=\"/hello\">Hello page</a>"
+                "</body></html>";
+
+            sendAll(client_fd, makeResponse(
+                200,
+                "OK",
+                "text/html; charset=utf-8",
+                body
+            ));
+
+            return;
+        }
+
+        if (method == "GET" && route == "/hello") {
+            std::string body =
+                "<!DOCTYPE html><html><head>"
+                "<meta charset=\"UTF-8\"><title>Hello</title>"
+                "</head><body><h1>Hello from C++!</h1>"
+                "<a href=\"/\">Home</a></body></html>";
+
+            sendAll(client_fd, makeResponse(
+                200,
+                "OK",
+                "text/html; charset=utf-8",
+                body
+            ));
+
+            return;
+        }
+
         sendAll(client_fd, makeResponse(
-            400, "Bad Request",
-            "text/html; charset=utf-8", body
+            404,
+            "Not Found",
+            "text/html; charset=utf-8",
+            "<h1>404 Not Found</h1>"
         ));
+
         return;
-    }
-
-    std::string request_line = request.substr(0, line_end);
-    std::istringstream line_stream(request_line);
-
-    std::string method;
-    std::string path;
-    std::string version;
-    std::string extra;
-
-    if (!(line_stream >> method >> path >> version) ||
-        (line_stream >> extra) ||
-        version != "HTTP/1.1" ||
-        path.empty() || path[0] != '/') {
-        std::string body = "<h1>400 Bad Request</h1>";
-        sendAll(client_fd, makeResponse(
-            400, "Bad Request",
-            "text/html; charset=utf-8", body
-        ));
-        return;
-    }
-
-    size_t query_pos = path.find('?');
-    if (query_pos != std::string::npos) {
-        path = path.substr(0, query_pos);
-    }
-
-    std::cout << method << " " << path
-              << " " << version << std::endl;
-
-    if (method != "GET") {
-        std::string body = "<h1>405 Method Not Allowed</h1>";
-        std::string response = makeResponse(
-            405, "Method Not Allowed",
-            "text/html; charset=utf-8", body
-        );
-
-        response.insert(
-            response.find("\r\n") + 2,
-            "Allow: GET\r\n"
-        );
-
-        sendAll(client_fd, response);
-        return;
-    }
-
-    if (path == "/") {
-        std::string body =
-            "<!DOCTYPE html>"
-            "<html lang=\"en\">"
-            "<head>"
-            "<meta charset=\"UTF-8\">"
-            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
-            "<title>MyWebServer</title>"
-            "</head>"
-            "<body>"
-            "<h1>Hello, WebServer!</h1>"
-            "<p>HTTP/1.1 is working.</p>"
-            "<p>This page is served by a C++ server.</p>"
-            "<p><a href=\"/hello\">Visit the hello page</a></p>"
-            "</body>"
-            "</html>";
-
-        sendAll(client_fd, makeResponse(
-            200, "OK", "text/html; charset=utf-8", body
-        ));
-    } else if (path == "/hello") {
-        std::string body =
-            "<!DOCTYPE html>"
-            "<html><head><meta charset=\"UTF-8\">"
-            "<title>Hello</title></head>"
-            "<body><h1>Hello from C++!</h1>"
-            "<a href=\"/\">Back to home</a></body></html>";
-
-        sendAll(client_fd, makeResponse(
-            200, "OK", "text/html; charset=utf-8", body
-        ));
-    } else {
-        std::string body =
-            "<!DOCTYPE html>"
-            "<html><head><meta charset=\"UTF-8\">"
-            "<title>404 Not Found</title></head>"
-            "<body><h1>404 Not Found</h1>"
-            "<p>The requested page does not exist.</p>"
-            "</body></html>";
-
-        sendAll(client_fd, makeResponse(
-            404, "Not Found", "text/html; charset=utf-8", body
-        ));
     }
 }
 
@@ -203,8 +216,14 @@ int main() {
     }
 
     int opt = 1;
-    if (setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR,
-                   &opt, sizeof(opt)) == -1) {
+
+    if (setsockopt(
+            listen_fd,
+            SOL_SOCKET,
+            SO_REUSEADDR,
+            &opt,
+            sizeof(opt)
+        ) == -1) {
         std::cerr << "setsockopt failed: "
                   << strerror(errno) << std::endl;
         close(listen_fd);
@@ -216,9 +235,11 @@ int main() {
     server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     server_addr.sin_port = htons(PORT);
 
-    if (bind(listen_fd,
-             reinterpret_cast<sockaddr*>(&server_addr),
-             sizeof(server_addr)) == -1) {
+    if (bind(
+            listen_fd,
+            reinterpret_cast<sockaddr*>(&server_addr),
+            sizeof(server_addr)
+        ) == -1) {
         std::cerr << "bind failed: "
                   << strerror(errno) << std::endl;
         close(listen_fd);

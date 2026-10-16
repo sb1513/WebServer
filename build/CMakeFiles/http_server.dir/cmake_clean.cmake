@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/http_server.dir/src/http/http_request.cpp.o"
+  "CMakeFiles/http_server.dir/src/http/http_request.cpp.o.d"
   "CMakeFiles/http_server.dir/src/http_server.cpp.o"
   "CMakeFiles/http_server.dir/src/http_server.cpp.o.d"
   "http_server"
