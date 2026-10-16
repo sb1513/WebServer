@@ -21,3 +21,12 @@ add_executable(
 )
 
 target_include_directories(epoll_server PRIVATE include)
+
+add_executable(
+    reactor
+    src/epoll_reactor_server.cpp
+    src/thread_pool.cpp
+    src/http/http_request.cpp
+)
+
+target_include_directories(reactor PRIVATE include)

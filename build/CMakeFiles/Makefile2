@@ -67,6 +67,7 @@ all: CMakeFiles/server.dir/all
 all: CMakeFiles/tcp_server.dir/all
 all: CMakeFiles/http_server.dir/all
 all: CMakeFiles/epoll_server.dir/all
+all: CMakeFiles/reactor.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -78,6 +79,7 @@ clean: CMakeFiles/server.dir/clean
 clean: CMakeFiles/tcp_server.dir/clean
 clean: CMakeFiles/http_server.dir/clean
 clean: CMakeFiles/epoll_server.dir/clean
+clean: CMakeFiles/reactor.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -87,7 +89,7 @@ clean: CMakeFiles/epoll_server.dir/clean
 CMakeFiles/server.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/e/MyProject/WebServer/build/CMakeFiles --progress-num=7,8 "Built target server"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/e/MyProject/WebServer/build/CMakeFiles --progress-num=11,12 "Built target server"
 .PHONY : CMakeFiles/server.dir/all
 
 # Build rule for subdir invocation for target.
@@ -113,7 +115,7 @@ CMakeFiles/server.dir/clean:
 CMakeFiles/tcp_server.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_server.dir/build.make CMakeFiles/tcp_server.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_server.dir/build.make CMakeFiles/tcp_server.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/e/MyProject/WebServer/build/CMakeFiles --progress-num=9,10 "Built target tcp_server"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/e/MyProject/WebServer/build/CMakeFiles --progress-num=13,14 "Built target tcp_server"
 .PHONY : CMakeFiles/tcp_server.dir/all
 
 # Build rule for subdir invocation for target.
@@ -183,6 +185,32 @@ epoll_server: CMakeFiles/epoll_server.dir/rule
 CMakeFiles/epoll_server.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/clean
 .PHONY : CMakeFiles/epoll_server.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/reactor.dir
+
+# All Build rule for target.
+CMakeFiles/reactor.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/mnt/e/MyProject/WebServer/build/CMakeFiles --progress-num=7,8,9,10 "Built target reactor"
+.PHONY : CMakeFiles/reactor.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/reactor.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/e/MyProject/WebServer/build/CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/reactor.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/e/MyProject/WebServer/build/CMakeFiles 0
+.PHONY : CMakeFiles/reactor.dir/rule
+
+# Convenience name for target.
+reactor: CMakeFiles/reactor.dir/rule
+.PHONY : reactor
+
+# clean rule for target.
+CMakeFiles/reactor.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/clean
+.PHONY : CMakeFiles/reactor.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

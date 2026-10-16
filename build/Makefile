@@ -168,6 +168,43 @@ epoll_server/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/build
 .PHONY : epoll_server/fast
 
+#=============================================================================
+# Target rules for targets named reactor
+
+# Build rule for target.
+reactor: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 reactor
+.PHONY : reactor
+
+# fast build rule for target.
+reactor/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/build
+.PHONY : reactor/fast
+
+src/epoll_reactor_server.o: src/epoll_reactor_server.cpp.o
+.PHONY : src/epoll_reactor_server.o
+
+# target to build an object file
+src/epoll_reactor_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/src/epoll_reactor_server.cpp.o
+.PHONY : src/epoll_reactor_server.cpp.o
+
+src/epoll_reactor_server.i: src/epoll_reactor_server.cpp.i
+.PHONY : src/epoll_reactor_server.i
+
+# target to preprocess a source file
+src/epoll_reactor_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/src/epoll_reactor_server.cpp.i
+.PHONY : src/epoll_reactor_server.cpp.i
+
+src/epoll_reactor_server.s: src/epoll_reactor_server.cpp.s
+.PHONY : src/epoll_reactor_server.s
+
+# target to generate assembly for a file
+src/epoll_reactor_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/src/epoll_reactor_server.cpp.s
+.PHONY : src/epoll_reactor_server.cpp.s
+
 src/epoll_server.o: src/epoll_server.cpp.o
 .PHONY : src/epoll_server.o
 
@@ -199,6 +236,7 @@ src/http/http_request.o: src/http/http_request.cpp.o
 src/http/http_request.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/http_server.dir/build.make CMakeFiles/http_server.dir/src/http/http_request.cpp.o
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/src/http/http_request.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/src/http/http_request.cpp.o
 .PHONY : src/http/http_request.cpp.o
 
 src/http/http_request.i: src/http/http_request.cpp.i
@@ -208,6 +246,7 @@ src/http/http_request.i: src/http/http_request.cpp.i
 src/http/http_request.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/http_server.dir/build.make CMakeFiles/http_server.dir/src/http/http_request.cpp.i
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/src/http/http_request.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/src/http/http_request.cpp.i
 .PHONY : src/http/http_request.cpp.i
 
 src/http/http_request.s: src/http/http_request.cpp.s
@@ -217,6 +256,7 @@ src/http/http_request.s: src/http/http_request.cpp.s
 src/http/http_request.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/http_server.dir/build.make CMakeFiles/http_server.dir/src/http/http_request.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/epoll_server.dir/build.make CMakeFiles/epoll_server.dir/src/http/http_request.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/src/http/http_request.cpp.s
 .PHONY : src/http/http_request.cpp.s
 
 src/http_server.o: src/http_server.cpp.o
@@ -291,6 +331,30 @@ src/tcp_server.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/tcp_server.dir/build.make CMakeFiles/tcp_server.dir/src/tcp_server.cpp.s
 .PHONY : src/tcp_server.cpp.s
 
+src/thread_pool.o: src/thread_pool.cpp.o
+.PHONY : src/thread_pool.o
+
+# target to build an object file
+src/thread_pool.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/src/thread_pool.cpp.o
+.PHONY : src/thread_pool.cpp.o
+
+src/thread_pool.i: src/thread_pool.cpp.i
+.PHONY : src/thread_pool.i
+
+# target to preprocess a source file
+src/thread_pool.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/src/thread_pool.cpp.i
+.PHONY : src/thread_pool.cpp.i
+
+src/thread_pool.s: src/thread_pool.cpp.s
+.PHONY : src/thread_pool.s
+
+# target to generate assembly for a file
+src/thread_pool.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/reactor.dir/build.make CMakeFiles/reactor.dir/src/thread_pool.cpp.s
+.PHONY : src/thread_pool.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -301,8 +365,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... epoll_server"
 	@echo "... http_server"
+	@echo "... reactor"
 	@echo "... server"
 	@echo "... tcp_server"
+	@echo "... src/epoll_reactor_server.o"
+	@echo "... src/epoll_reactor_server.i"
+	@echo "... src/epoll_reactor_server.s"
 	@echo "... src/epoll_server.o"
 	@echo "... src/epoll_server.i"
 	@echo "... src/epoll_server.s"
@@ -318,6 +386,9 @@ help:
 	@echo "... src/tcp_server.o"
 	@echo "... src/tcp_server.i"
 	@echo "... src/tcp_server.s"
+	@echo "... src/thread_pool.o"
+	@echo "... src/thread_pool.i"
+	@echo "... src/thread_pool.s"
 .PHONY : help
 
 
